@@ -17,6 +17,7 @@
         <div class="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
           <router-link v-if="hasToken == false" to="/login" class="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">Login</router-link>
           <router-link v-if="hasToken == false" to="/register" class="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700">Cadastro</router-link>
+          <router-link v-if="hasToken == true" to="/registcontact" class="mr-8 inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-green-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-green-700">Registrar novo contato</router-link>
           <router-link v-if="hasToken == true" to="/contactlist" class="mr-8 inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700">Lista de contatos</router-link>
           <a v-if="hasToken == true" @click="logout()" class="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">Sair</a>
         </div>
@@ -86,15 +87,18 @@ import {
 } from '@heroicons/vue/24/outline'
 import { ref } from 'vue';
 
-const hora = 60000 * 60
-const hasToken = ref(false)
+const hasToken = ref({
+  value: false,
+  setValue(newValue){
+    this.value = newValue
+  }
+})
 hasToken.value = (localStorage.getItem("token") != null) ? true : false
 
-setInterval(()=>{
-  hasToken.value = (localStorage.getItem("token") != null) ? true : false
-  (hasToken.value) ? atualizaToken() : logout()
+defineExpose({
+  hasToken
+})
 
-}, 1)
 
 const logout = () => {
   localStorage.removeItem("token")

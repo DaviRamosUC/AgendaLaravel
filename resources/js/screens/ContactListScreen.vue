@@ -1,9 +1,16 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import AlertComponent from '../components/AlertComponent.vue'
+import SlideOverComponent from '../components/SlideOverComponent.vue'
 
 let contatos = ref([])
 let hasContatos = ref(false)
+let openSlideOver = ref({
+  value: false,
+  setValue() {
+    this.value = !this.value
+  }
+})
 
 onMounted(async () => {
   // await getContacts()
@@ -16,6 +23,15 @@ onMounted(async () => {
       }
     });
 });
+
+const editarContato = (id) => {
+  openSlideOver.value = !openSlideOver.value;
+  console.log("Abrir")
+}
+
+const deletarContato = (id) => {
+
+}
 
 </script>
 
@@ -64,13 +80,13 @@ onMounted(async () => {
                       {{ contato.telefone }}
                     </td>
                     <td class="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                      <a class="text-green-500 hover:text-green-700" href="#">
-                        Edit
+                      <a class="text-green-500 hover:text-green-700" href="#" @click="editarContato(contato.id)">
+                        Editar
                       </a>
                     </td>
                     <td class="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                      <a class="text-red-500 hover:text-red-700" href="#">
-                        Delete
+                      <a class="text-red-500 hover:text-red-700" href="#" @click="deletarContato(contato.id)">
+                        Deletar
                       </a>
                     </td>
                   </tr>
@@ -82,5 +98,6 @@ onMounted(async () => {
         </div>
       </div>
     </div>
+    <SlideOverComponent v-bind:open="openSlideOver.value"/>
   </div>
 </template>
