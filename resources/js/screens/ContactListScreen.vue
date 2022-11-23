@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import AlertComponent from '../components/AlertComponent.vue'
+import CustomAlertComponent from '../components/CustomAlertComponent.vue'
 import SlideOverComponent from '../components/SlideOverComponent.vue'
 import router from '../router'
 
@@ -34,12 +35,16 @@ const deletarContato = async (id) => {
   await axios
     .delete(`/api/deletecontact/${id}`,)
     .then(response => {
-      if (response == 200) {
-        router.push('/contactlist')
+      if (response.status == 200) {
+        router.go()
       } else {
 
       }
     });
+}
+
+const verEndereco = () => {
+
 }
 
 const redireciona = () => {
@@ -120,6 +125,7 @@ const redireciona = () => {
         </div>
       </div>
     </div>
-    <SlideOverComponent :newOpen="open" ref="slideOver"/>
+    <SlideOverComponent :newOpen="open" ref="slideOver" />
+    <CustomAlertComponent botao="Cadastrar" cor="green" :redireciona="redireciona" />
   </div>
 </template>
