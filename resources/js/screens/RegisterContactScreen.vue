@@ -150,7 +150,7 @@ export default {
                   <label for="estado" class="block text-sm font-medium text-gray-700">Estado</label>
                   <select id="estado" name="estado" autocomplete="country-name" required v-model="estado"
                     class="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
-                    <option v-for="estado_nome in states">{{ estado_nome }}</option>
+                    <option v-for="estado_nome in states" :key="estado_nome">{{ estado_nome }}</option>
                   </select>
                 </div>
 

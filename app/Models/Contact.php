@@ -9,8 +9,8 @@ class Contact extends Model
 {
     use HasFactory;
 
-    public function Address()
+    public function Addresses()
     {
-        return $this->hasOne(Address::class);
+        return $this->hasOne(Address::class, "id");
     }
 }

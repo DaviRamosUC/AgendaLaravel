@@ -23,9 +23,11 @@ const consultaContatos = async () => {
 }
 
 const open = ref(false)
+const slideOver = ref(null)
 
-const editarContato = (id) => {
-
+const editarContato = (value) => {
+  open.value = true;
+  slideOver.value.preencher(value)
 }
 
 const deletarContato = async (id) => {
@@ -48,7 +50,7 @@ const redireciona = () => {
 
 <template>
   <div class="flex h-full bg-white">
-    <div class="mx-auto py-20 w-3/5">
+    <div class="mx-auto py-20 w-4/5">
       <div class="flex flex-col">
         <div class="overflow-x-auto">
           <div class="p-1.5 w-full inline-block align-middle">
@@ -67,6 +69,9 @@ const redireciona = () => {
                     </th>
                     <th scope="col" class="px-6 py-3 text-xs font-bold text-left text-gray-500 uppercase">
                       Telefone
+                    </th>
+                    <th scope="col" class="px-6 py-3 text-xs font-bold text-right text-gray-500 uppercase">
+                      Endereço
                     </th>
                     <th scope="col" class="px-6 py-3 text-xs font-bold text-right text-gray-500 uppercase">
                       Editar
@@ -90,8 +95,13 @@ const redireciona = () => {
                     <td class="px-6 py-4 text-sm text-gray-800 whitespace-nowrap">
                       {{ contato.telefone }}
                     </td>
+                    <td class="px-6 py-4 text-sm font-medium text-center whitespace-nowrap">
+                      <a class="text-blue-500 hover:text-blue-700" href="#" @click="verEndereco(contato)">
+                        Ver
+                      </a>
+                    </td>
                     <td class="px-6 py-4 text-sm font-medium text-right whitespace-nowrap">
-                      <a class="text-green-500 hover:text-green-700" href="#" @click="editarContato(contato.id)">
+                      <a class="text-green-500 hover:text-green-700" href="#" @click="editarContato(contato)">
                         Editar
                       </a>
                     </td>
@@ -110,6 +120,6 @@ const redireciona = () => {
         </div>
       </div>
     </div>
-    <SlideOverComponent :varOpen="setvarOpen" />
+    <SlideOverComponent :newOpen="open" ref="slideOver"/>
   </div>
 </template>

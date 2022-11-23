@@ -9,7 +9,7 @@ class Address extends Model
 {
     use HasFactory;
 
-    public function Contact()
+    public function Contacts()
     {
         return $this->belongsTo(Contact::class);
     }

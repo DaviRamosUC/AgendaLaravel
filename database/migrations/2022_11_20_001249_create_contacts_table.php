@@ -16,9 +16,10 @@ class CreateContactsTable extends Migration
         Schema::create('contacts', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nome');
+            $table->string('sobrenome');
             $table->string('email');
             $table->string('telefone');
-            $table->unsignedInteger('addresses_id');
+            $table->foreignId('addresses_id')->constrained('Addresses','id');
             $table->timestamps();
 
         });

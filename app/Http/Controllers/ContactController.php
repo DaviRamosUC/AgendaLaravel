@@ -15,7 +15,7 @@ class ContactController extends Controller
      */
     public function index()
     {
-        $contacts = Contact::all();
+        $contacts = Contact::with('Addresses')->get();
 
         return response()->json([
             'contacts' => $contacts
@@ -52,7 +52,8 @@ class ContactController extends Controller
         $newAddress->save();
 
         $newContact = new Contact();
-        $newContact->nome = $formulario['nome']." ".$formulario['sobrenome'];
+        $newContact->nome = $formulario['nome'];
+        $newContact->sobrenome = $formulario['sobrenome'];
         $newContact->email = $formulario['email'];
         $newContact->telefone = $formulario['telefone'];
         $newContact->addresses_id = $newAddress->id;

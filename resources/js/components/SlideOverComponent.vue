@@ -4,12 +4,6 @@ import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } fro
 import { XMarkIcon } from '@heroicons/vue/24/outline'
 
 export default {
-  setup() {
-    const varOpen = ref(false)
-    return {
-      varOpen
-    }
-  },
   data() {
     return {
       nome: '',
@@ -50,13 +44,26 @@ export default {
         'SP': 'São Paulo',
         'SE': 'Sergipe',
         'TO': 'Tocantins',
-      }
+      },
+      newOpen: ref(false),
     }
   },
   methods: {
     handleSubmit: () => {
-      this.nome = 'Davi Ramos'
+
     },
+    preencher: function (contato) {
+      this.nome = contato.nome;
+      this.sobrenome = contato.sobrenome;
+      this.email = contato.email;
+      this.telefone = contato.telefone; 
+      this.cep = contato.addresses.CEP;
+      this.estado = contato.addresses.estado;
+      this.bairro = contato.addresses.bairro;
+      this.logradouro = contato.addresses.endereco;
+      this.numero = contato.addresses.numero;
+      this.cidade = contato.addresses.cidade;
+    }
   },
   components: {
     Dialog,
@@ -66,15 +73,18 @@ export default {
     TransitionRoot,
     XMarkIcon
   },
-
+  props: ['newOpen'],
+  watch: {
+    newOpen: function (value) {
+      this.newOpen = value;
+    },
+  }
 }
-
-
 </script>
 
 <template>
-  <TransitionRoot as="template" :show="varOpen">
-    <Dialog as="div" class="relative z-10" @close="varOpen = false">
+  <TransitionRoot as="template" :show="newOpen">
+    <Dialog as="div" class="relative z-10" @close="newOpen = false">
       <TransitionChild as="template" enter="ease-in-out duration-500" enter-from="opacity-0" enter-to="opacity-100"
         leave="ease-in-out duration-500" leave-from="opacity-100" leave-to="opacity-0">
         <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
@@ -93,7 +103,7 @@ export default {
                   <div class="absolute top-0 left-0 -ml-8 flex pt-4 pr-2 sm:-ml-10 sm:pr-4">
                     <button type="button"
                       class="rounded-md text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-white"
-                      @click="varOpen = false">
+                      @click="newOpen = false">
                       <span class="sr-only">Close panel</span>
                       <XMarkIcon class="h-6 w-6" aria-hidden="true" />
                     </button>
@@ -111,72 +121,71 @@ export default {
                           <div class="grid grid-cols-6 gap-6">
                             <div class="col-span-6 sm:col-span-3">
                               <label for="nome" class="block text-sm font-medium text-gray-700">Nome</label>
-                              <input type="text" name="nome" id="nome" autocomplete="given-name" required :value="nome"
+                              <input type="text" name="nome" id="nome" autocomplete="given-name" required v-model="nome"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
                             </div>
 
                             <div class="col-span-6 sm:col-span-3">
                               <label for="sobrenome" class="block text-sm font-medium text-gray-700">Sobrenome</label>
                               <input type="text" name="sobrenome" id="sobrenome" autocomplete="family-name" required
-                                :value="sobrenome"
+                                v-model="sobrenome"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
                             </div>
 
                             <div class="col-span-6 sm:col-span-3">
                               <label for="email" class="block text-sm font-medium text-gray-700">Endereço de
                                 e-mail</label>
-                              <input type="text" name="email" id="email" autocomplete="email" required :value="email"
+                              <input type="text" name="email" id="email" autocomplete="email" required v-model="email"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
                             </div>
 
                             <div class="col-span-6 sm:col-span-3">
                               <label for="telefone" class="block text-sm font-medium text-gray-700">Telefone</label>
                               <input type="tel" name="telefone" id="telefone" autocomplete="tel" required
-                                :value="telefone"
+                                v-model="telefone"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
                             </div>
 
                             <div class="col-span-6 sm:col-span-3 lg:col-span-3">
                               <label for="cep" class="block text-sm font-medium text-gray-700">CEP</label>
                               <input type="text" name="cep" id="cep" autocomplete="postal-code"
-                                @focusout="handleSearchPostalCode"
                                 onkeypress='return event.charCode >= 48 && event.charCode <= 57'
-                                placeholder="ex: 24910530" required :value="cep"
+                                placeholder="ex: 24910530" required v-model="cep"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
                             </div>
 
                             <div class="col-span-6 sm:col-span-3">
                               <label for="estado" class="block text-sm font-medium text-gray-700">Estado</label>
-                              <select id="estado" name="estado" autocomplete="country-name" required :value="estado"
+                              <select id="estado" name="estado" autocomplete="country-name" required v-model="estado"
                                 class="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
-                                <option v-for="estado_nome in states">{{ estado_nome }}</option>
+                                <option v-for="estado_nome in states" :key="estado_nome">{{ estado_nome }}</option>
                               </select>
                             </div>
 
                             <div class="col-span-3">
                               <label for="bairro" class="block text-sm font-medium text-gray-700">Bairro</label>
-                              <input type="text" name="bairro" id="bairro" required :value="bairro"
+                              <input type="text" name="bairro" id="bairro" required v-model="bairro"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
                             </div>
 
                             <div class="col-span-3">
                               <label for="logradouro" class="block text-sm font-medium text-gray-700">Logradouro</label>
                               <input type="text" name="logradouro" id="logradouro" autocomplete="street-address"
-                                required :value="logradouro"
+                                required v-model="logradouro"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
                             </div>
 
 
                             <div class="col-span-3">
                               <label for="numero" class="block text-sm font-medium text-gray-700">Número</label>
-                              <input type="text" name="numero" id="numero" :value="numero"
+                              <input type="text" name="numero" id="numero" v-model="numero"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
                             </div>
 
-                            <div class="col-span-3 sm:col-span-6 lg:col-span-3">
+                            <div class="col-span-3 sm:col-span-3 lg:col-span-3">
                               <label for="cidade" class="block text-sm font-medium text-gray-700">Cidade</label>
                               <input type="text" name="cidade" id="cidade" autocomplete="address-level2" required
-                                :value="cidade"
+                                v-model="cidade"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
                             </div>
                           </div>
