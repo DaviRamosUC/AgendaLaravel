@@ -2,35 +2,46 @@
 import { onMounted, ref } from "vue";
 import AlertComponent from '../components/AlertComponent.vue'
 import SlideOverComponent from '../components/SlideOverComponent.vue'
+import router from '../router'
 
 let contatos = ref([])
 let hasContatos = ref(false)
-let openSlideOver = ref({
-  value: false,
-  setValue() {
-    this.value = !this.value
-  }
-})
 
 onMounted(async () => {
-  // await getContacts()
+  consultaContatos()
+});
+
+const consultaContatos = async () => {
   await axios
     .get("/api/get_contacts")
     .then(response => {
       contatos.value = response.data.contacts;
-      if(contatos.value.length == 0){
+      if (contatos.value.length == 0) {
         hasContatos.value = true
       }
     });
-});
-
-const editarContato = (id) => {
-  openSlideOver.value = !openSlideOver.value;
-  console.log("Abrir")
 }
 
-const deletarContato = (id) => {
+const open = ref(false)
 
+const editarContato = (id) => {
+
+}
+
+const deletarContato = async (id) => {
+  await axios
+    .delete(`/api/deletecontact/${id}`,)
+    .then(response => {
+      if (response == 200) {
+        router.push('/contactlist')
+      } else {
+
+      }
+    });
+}
+
+const redireciona = () => {
+  router.push('/registcontact')
 }
 
 </script>
@@ -93,11 +104,12 @@ const deletarContato = (id) => {
                 </tbody>
               </table>
             </div>
-           <AlertComponent titulo="Não há contatos" mensagem="Ainda não foram cadastrados novos contatos" botao="Cadastrar" cor="green" v-if="hasContatos == true"/>
+            <AlertComponent titulo="Não há contatos" mensagem="Ainda não foram cadastrados novos contatos"
+              botao="Cadastrar" cor="green" :redireciona="redireciona" v-if="hasContatos == true" />
           </div>
         </div>
       </div>
     </div>
-    <SlideOverComponent v-bind:open="openSlideOver.value"/>
+    <SlideOverComponent :varOpen="setvarOpen" />
   </div>
 </template>

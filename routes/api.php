@@ -24,3 +24,5 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::get('/get_contacts', [ContactController::class, 'index']);
 Route::post('/registercontact',[ContactController::class, 'store']);
+Route::put('/updatecontact/{id}',[ContactController::class, 'update']);
+Route::delete('/deletecontact/{id}',[ContactController::class, 'delete']);

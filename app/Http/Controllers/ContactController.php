@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 
@@ -39,7 +40,28 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $formulario = $request->input();
+        
+        $newAddress = new Address();
+        $newAddress->cep = $formulario['cep'];
+        $newAddress->estado = $formulario['estado'];
+        $newAddress->cidade = $formulario['cidade'];
+        $newAddress->bairro = $formulario['bairro'];
+        $newAddress->endereco = $formulario['logradouro'];
+        $newAddress->numero = $formulario['numero'];
+        $newAddress->save();
+
+        $newContact = new Contact();
+        $newContact->nome = $formulario['nome']." ".$formulario['sobrenome'];
+        $newContact->email = $formulario['email'];
+        $newContact->telefone = $formulario['telefone'];
+        $newContact->addresses_id = $newAddress->id;
+        $newContact->save();
+
+        return response()->json([
+            'contato' => $newContact
+        ], 200);
+
     }
 
     /**
@@ -82,8 +104,19 @@ class ContactController extends Controller
      * @param  \App\Models\Contact  $contact
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Contact $contact)
+    public function delete($id)
     {
-        //
+        $contact = Contact::where('id',$id)->first();
+        if($contact){
+            $response = Contact::destroy($id);
+            return response()->json([
+                'id' => $response
+            ], 200);
+        }else{
+            return response()->json([
+                'id' => 0
+            ], 400);
+        }
+
     }
 }
