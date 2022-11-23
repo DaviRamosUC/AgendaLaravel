@@ -1,5 +1,6 @@
 <script setup>
 import { LockClosedIcon } from '@heroicons/vue/20/solid'
+import NavigationBarComponent from '../components/NavigationBarComponent.vue'
 import router from '../router'
 
 const handleSubmit = async (submitEvent) => {
@@ -19,6 +20,7 @@ const handleSubmit = async (submitEvent) => {
       token = response.data.token
       localStorage.setItem("token", token)
       router.push('/contactlist')
+      console.log(NavigationBarComponent)
     }).catch(err => {
       alert("Houve um erro ao logar!")
       console.error(err)

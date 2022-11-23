@@ -2,10 +2,12 @@
 import { ref } from 'vue'
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { XMarkIcon } from '@heroicons/vue/24/outline'
+import router from '../router'
 
 export default {
   data() {
     return {
+      id: null,
       nome: '',
       sobrenome: '',
       email: '',
@@ -49,20 +51,51 @@ export default {
     }
   },
   methods: {
-    handleSubmit: () => {
-
+    handleSubmit: async function (submitEvent) {
+      const form = submitEvent.target.elements
+      let id = this.id;
+      let nome = form.nome.value;
+      let sobrenome = form.sobrenome.value;
+      let email = form.email.value;
+      let telefone = form.telefone.value;
+      let logradouro = form.logradouro.value;
+      let bairro = form.bairro.value;
+      let numero = form.numero.value;
+      let cidade = form.cidade.value;
+      let estado = form.estado.value;
+      let cep = form.cep.value;
+      
+      await axios
+        .put(`/api/updatecontact/${id}`, {
+          id,
+          nome,
+          sobrenome,
+          email,
+          telefone,
+          cep,
+          estado,
+          bairro,
+          logradouro,
+          numero,
+          cidade,
+        })
+        .then(response => {
+          router.go()
+        });
     },
     preencher: function (contato) {
+      this.id = contato.id
       this.nome = contato.nome;
       this.sobrenome = contato.sobrenome;
       this.email = contato.email;
-      this.telefone = contato.telefone; 
+      this.telefone = contato.telefone;
       this.cep = contato.addresses.CEP;
       this.estado = contato.addresses.estado;
       this.bairro = contato.addresses.bairro;
       this.logradouro = contato.addresses.endereco;
       this.numero = contato.addresses.numero;
       this.cidade = contato.addresses.cidade;
+      this.newOpen = true
     }
   },
   components: {
@@ -73,12 +106,6 @@ export default {
     TransitionRoot,
     XMarkIcon
   },
-  props: ['newOpen'],
-  watch: {
-    newOpen: function (value) {
-      this.newOpen = value;
-    },
-  }
 }
 </script>
 

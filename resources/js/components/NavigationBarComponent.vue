@@ -99,7 +99,6 @@ defineExpose({
   hasToken
 })
 
-
 const logout = () => {
   localStorage.removeItem("token")
   hasToken.value = false

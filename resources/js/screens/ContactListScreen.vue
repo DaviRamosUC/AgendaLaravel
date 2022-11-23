@@ -24,27 +24,31 @@ const consultaContatos = async () => {
 }
 
 const open = ref(false)
+const openDetail = ref(false)
 const slideOver = ref(null)
+const customAlert = ref(null)
+
+const deletarContato = async (id) => {
+  await axios
+  .delete(`/api/deletecontact/${id}`,)
+  .then(response => {
+    if (response.status == 200) {
+      router.go()
+    } else {
+      
+    }
+  });
+}
 
 const editarContato = (value) => {
   open.value = true;
   slideOver.value.preencher(value)
 }
 
-const deletarContato = async (id) => {
-  await axios
-    .delete(`/api/deletecontact/${id}`,)
-    .then(response => {
-      if (response.status == 200) {
-        router.go()
-      } else {
-
-      }
-    });
-}
-
-const verEndereco = () => {
-
+const verEndereco = (value) => {
+  const endereco = value.addresses
+  openDetail.value = true;
+  customAlert.value.setEndereco(endereco)
 }
 
 const redireciona = () => {
@@ -126,6 +130,6 @@ const redireciona = () => {
       </div>
     </div>
     <SlideOverComponent :newOpen="open" ref="slideOver" />
-    <CustomAlertComponent botao="Cadastrar" cor="green" :redireciona="redireciona" />
+    <CustomAlertComponent botao="Ok" ref="customAlert" :newOpen="openDetail" :redireciona="redireciona"/>
   </div>
 </template>

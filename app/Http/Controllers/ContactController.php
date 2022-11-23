@@ -94,9 +94,29 @@ class ContactController extends Controller
      * @param  \App\Models\Contact  $contact
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Contact $contact)
+    public function update(Request $request)
     {
-        //
+        $formulario = $request->input();
+        
+        $contato = Contact::where('id', $formulario['id'])->first();
+        $contato->nome = $formulario['nome'];
+        $contato->sobrenome = $formulario['sobrenome'];
+        $contato->email = $formulario['email'];
+        $contato->telefone = $formulario['telefone'];
+        $contato->save();
+
+        $endereco = Address::where('id', $contato->addresses_id)->first();
+        $endereco->CEP = $formulario['cep'];
+        $endereco->bairro = $formulario['bairro'];
+        $endereco->estado = $formulario['estado'];
+        $endereco->numero = $formulario['numero'];
+        $endereco->cidade = $formulario['cidade'];
+        $endereco->endereco = $formulario['logradouro'];
+        $endereco->save();
+        
+        return response()->json([
+            'contato' => $formulario
+        ], 200);
     }
 
     /**
