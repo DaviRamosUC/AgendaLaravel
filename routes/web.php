@@ -16,3 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('{any?}', function () {
     return view('index');
 })->where('any', '.*');
+
+
+Route::get('/email', function () {
+    return new \App\Mail\NewContactRegistered();
+});

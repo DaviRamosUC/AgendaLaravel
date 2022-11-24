@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\Address;
 use App\Models\Contact;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
@@ -27,9 +29,16 @@ class ContactController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function email($id)
     {
-        //
+        $data = ['Id'=>$id];
+        Mail::send('emails.newContact', $data, function ($message) {
+            $message->from('ifbadavi@gmail.com', 'Davi Ramos');
+            $message->sender('ifbadavi@gmail.com', 'Davi Ramos');
+            $message->to('rmatos358@gmail.com', 'Renata Matos');
+            $message->replyTo('ifbadavi@gmail.com', 'Davi Ramos');
+            $message->subject('Email de teste');
+        });
     }
 
     /**
